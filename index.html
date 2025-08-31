@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>St. Mary’s Fujairah – Parent Q&A</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root { --p:#3b5bdb; --bg:#fafbff; --card:#fff; --muted:#666; }
+    body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); }
+    header { padding:24px; background:linear-gradient(180deg,#eef1ff,transparent); border-bottom:1px solid #eef; }
+    header h1{margin:0 0 6px} header p{margin:0;color:var(--muted)}
+    main { max-width:960px; margin:24px auto 120px; padding:0 16px; }
+    .card { background:var(--card); border:1px solid #eee; border-radius:16px; padding:18px; margin-bottom:14px; }
+    .tight{margin:8px 0 0 18px}
+    #chatBtn{position:fixed;right:24px;bottom:24px;background:var(--p);color:#fff;border:none;border-radius:999px;padding:14px 18px;font-weight:600;box-shadow:0 10px 26px rgba(59,91,219,.35);cursor:pointer}
+    #panel{position:fixed;right:24px;bottom:92px;width:min(420px,calc(100vw - 32px));height:560px;display:none;background:#fff;border:1px solid #e6e9ff;border-radius:18px;box-shadow:0 18px 56px rgba(59,91,219,.25);overflow:hidden}
+    #hdr{padding:10px 14px;background:#f4f6ff;border-bottom:1px solid #e6e9ff}
+    #chat{height:calc(100% - 56px - 60px);overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#fcfcff}
+    .bubble{max-width:85%;padding:11px 13px;border-radius:14px;border:1px solid #eef}
+    .me{margin-left:auto;background:#eef2ff}
+    #form{display:flex;gap:8px;padding:10px;border-top:1px solid #e6e9ff;background:#fff}
+    #q{flex:1;padding:12px;border:1px solid #dfe3f9;border-radius:12px}
+    #send{background:var(--p);color:#fff;border:none;border-radius:12px;padding:0 16px;font-weight:600}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>St. Mary’s Catholic High School, Fujairah</h1>
+    <p>Parent information & instant Q&A</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Quick info</h2>
+      <ul class="tight">
+        <li>UK British Curriculum (Pearson Edexcel Centre). GCSE/IGCSE → IAS → IAL.</li>
+        <li>Arabic: mandatory G1–9 (Arabs compulsory till G12). Islamic: compulsory for Muslims G1–12.</li>
+        <li>Fees (AED/yr): KG1–2 7,270 | G1–3 8,100 | G4–6 9,100 | G7–8 11,200 | G9–10 13,100 | G11–12 15,900.</li>
+        <li>G1–9 admissions via entrance tests (Eng & Math ~1h); KG age 4+ on/before Aug 31.</li>
+      </ul>
+    </section>
+  </main>
+
+  <button id="chatBtn">Ask the School</button>
+  <section id="panel">
+    <div id="hdr"><strong>Parent Q&A Assistant</strong></div>
+    <div id="chat"></div>
+    <form id="form">
+      <input id="q" placeholder="Ask about admissions, fees, subjects…" autocomplete="off"/>
+      <button id="send">Send</button>
+    </form>
+  </section>
+
+  <!-- Minimal knowledge base (you can expand anytime) -->
+  <script id="kb" type="application/json">
+  {
+    "admissions": {
+      "kg_age_rule": "KG1/KG2 applicants must be four years old on/before Aug 31 for September start.",
+      "grade_tests": "Entrance test in English and Math (~1 hour each) for Grades 1–9; competitive if applicants exceed seats.",
+      "no_grade10": "No new admissions to Grade 10 (students prepare for London Board exams).",
+      "grade11": "Enrollment after O’/Grade 10 results for UK curriculum students with minimum A*/A; 9–7.",
+      "grade12": "Entry restricted to students who completed IAS with minimum grades A and B."
+    },
+    "fees_per_year_aed": { "KG1-2": 7270, "G1-3": 8100, "G4-6": 9100, "G7-8": 11200, "G9-10": 13100, "G11-12": 15900 },
+    "subjects": {
+      "grade9_minimum": "Minimum 9 subjects.",
+      "pairs": ["Chemistry or Accounts", "Physics or Economics", "Biology or Business Studies"],
+      "a_level": ["Math", "Physics or Economics", "Chemistry or Accounts", "Biology or Business Studies", "Islam (English or Arabic)", "Higher/Lower Arabic"]
+    },
+    "equivalency": [
+      "Finish Grade 12.",
+      "Pass 5 GCSE/IGCSE (A*–D or 9–3) incl. Math, a science, and English Lang/Lit.",
+      "Pass 2 Advanced (A-Level/IAS/IAL) subjects (A*–E).",
+      "Arabic & Islamic are not counted among the required equivalency subjects."
+    ]
+  }
+  </script>
+
+  <script>
+    const WORKER_URL = "https://delicate-cake-3610.gowriarunn2008.workers.dev/"; // <-- put your worker URL here
+    const btn = document.getElementById('chatBtn');
+    const panel = document.getElementById('panel');
+    const chat = document.getElementById('chat');
+    const form = document.getElementById('form');
+    const q = document.getElementById('q');
+    const kb = document.getElementById('kb').textContent;
+
+    const add = (t, who='bot') => { const b=document.createElement('div'); b.className='bubble '+(who==='me'?'me':''); b.textContent=t; chat.appendChild(b); chat.scrollTop=chat.scrollHeight; return b; };
+
+    btn.addEventListener('click', ()=>{
+      panel.style.display = panel.style.display==='block' ? 'none' : 'block';
+      if (panel.style.display==='block' && chat.childElementCount===0) add("Hi! Ask me about admissions, fees, or subjects.");
+    });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const question = (q.value||"").trim(); if(!question) return;
+      add(question,'me'); q.value='';
+      const dots = add('…');
+      try{
+        const r = await fetch(`${WORKER_URL}/api/ask`, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ question, kb })
+        });
+        const data = await r.json();
+        dots.remove();
+        add(data.answer || "Sorry, I don't have that info.");
+      }catch(err){
+        dots.remove(); add("Network error. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
