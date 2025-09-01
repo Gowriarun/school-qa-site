@@ -5,17 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>St. Mary’s Parent Assistant</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
     :root{
-      --bg:#0f1222;           /* deep indigo bg */
-      --panel:#141833;        /* chat surface */
-      --muted:#a9b1d6;
-      --text:#e9edff;
-      --bubble:#1b2250;       /* bot bubble */
-      --me:#2b377f;           /* my bubble */
-      --accent:#6ea8ff;       /* buttons/links */
-      --border:rgba(255,255,255,.08);
+      --bg:#0f1222; --panel:#141833; --muted:#a9b1d6; --text:#e9edff;
+      --bubble:#1b2250; --me:#2b377f; --accent:#6ea8ff; --border:rgba(255,255,255,.08);
       --ring:rgba(110,168,255,.25);
     }
     *{box-sizing:border-box}
@@ -25,110 +18,61 @@
       font-family:Poppins,system-ui,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-
-    /* shell */
-    .wrap{
-      min-height:100%;
-      display:flex; align-items:center; justify-content:center;
-      padding:16px;
-    }
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
     .card{
-      width:min(960px,100%);
-      height:min(82vh,820px);
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.02)) , var(--panel);
-      border:1px solid var(--border); border-radius:20px;
+      width:min(960px,100%); height:min(82vh,820px);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.02)),var(--panel);
+      border:1px solid var(--border); border-radius:20px; overflow:hidden;
+      display:grid; grid-template-rows:auto 1fr auto;
       box-shadow:0 30px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04) inset;
-      display:grid; grid-template-rows:auto 1fr auto; overflow:hidden;
     }
+    header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(255,255,255,.04),transparent)}
+    .logo{height:28px;width:28px;border-radius:8px;background:linear-gradient(135deg,#6ea8ff,#a28bff);box-shadow:0 0 0 4px rgba(110,168,255,.12)}
+    .brand{font-weight:600;letter-spacing:.3px}
+    .sub{margin-left:auto;color:var(--muted);font-size:12px}
 
-    /* top bar */
-    header{
-      display:flex; align-items:center; gap:12px;
-      padding:14px 16px; border-bottom:1px solid var(--border);
-      background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.3px;
-    }
-    .logo{
-      height:28px; width:28px; border-radius:8px;
-      background:linear-gradient(135deg,#6ea8ff,#a28bff); box-shadow:0 0 0 4px rgba(110,168,255,.12);
-      display:inline-block;
-    }
-    .sub{margin-left:auto;color:var(--muted); font-size:12px}
-
-    /* chat */
-    .chat{
-      position:relative; overflow:auto; padding:18px; display:flex; flex-direction:column; gap:12px;
-      scroll-behavior:smooth; background:
-        radial-gradient(600px 260px at 10% -10%, rgba(110,168,255,.08), transparent 70%),
-        radial-gradient(600px 260px at 110% 10%, rgba(162,139,255,.08), transparent 70%);
-    }
-    .bubble{
-      max-width:min(78ch, 86%);
-      padding:12px 14px; border-radius:16px; line-height:1.55; font-size:15px;
-      border:1px solid var(--border); background:var(--bubble);
-      box-shadow:0 6px 24px rgba(0,0,0,.18);
-    }
-    .me{ margin-left:auto; background:var(--me) }
-    .bot{ margin-right:auto }
-    .hint{ color:var(--muted); font-size:12px; margin-top:4px }
-    .typing{ display:inline-flex; gap:6px; align-items:center }
-    .dot{ width:6px; height:6px; border-radius:50%; background:#c9d5ff; opacity:.6; animation:blink 1.3s infinite }
+    .chat{position:relative;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;background:
+      radial-gradient(600px 260px at 10% -10%, rgba(110,168,255,.08), transparent 70%),
+      radial-gradient(600px 260px at 110% 10%, rgba(162,139,255,.08), transparent 70%)}
+    .bubble{max-width:min(78ch,86%);padding:12px 14px;border-radius:16px;line-height:1.55;font-size:15px;border:1px solid var(--border);
+      background:var(--bubble);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+    .me{margin-left:auto;background:var(--me)}
+    .bot{margin-right:auto}
+    .hint{color:var(--muted);font-size:12px;margin-top:4px}
+    .typing{display:inline-flex;gap:6px;align-items:center}
+    .dot{width:6px;height:6px;border-radius:50%;background:#c9d5ff;opacity:.6;animation:blink 1.3s infinite}
     .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
-    @keyframes blink { 0%,80%,100%{opacity:.2} 30%{opacity:.9} }
+    @keyframes blink{0%,80%,100%{opacity:.2}30%{opacity:.9}}
 
-    /* dock */
-    .dock{
-      padding:12px; border-top:1px solid var(--border); background:linear-gradient(0deg,rgba(255,255,255,.03),transparent);
-      display:grid; gap:10px;
-    }
-    .chips{ display:flex; gap:8px; flex-wrap:wrap }
-    .chip{
-      background:transparent; border:1px solid var(--border); color:var(--muted);
-      padding:8px 10px; border-radius:999px; font-size:12px; cursor:pointer;
-    }
-    .chip:hover{ border-color:#8fb7ff33; color:#d9e4ff; box-shadow:0 0 0 4px var(--ring) }
-
-    .form{ display:flex; gap:10px }
-    input[type="text"]{
-      flex:1; padding:14px 14px; border-radius:12px; border:1px solid var(--border);
-      background:#0f1330; color:var(--text); outline:none; font-size:15px;
-    }
+    .dock{padding:12px;border-top:1px solid var(--border);background:linear-gradient(0deg,rgba(255,255,255,.03),transparent);display:grid;gap:10px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer}
+    .chip:hover{border-color:#8fb7ff33;color:#d9e4ff;box-shadow:0 0 0 4px var(--ring)}
+    .form{display:flex;gap:10px}
+    input[type="text"]{flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:#0f1330;color:var(--text);outline:none;font-size:15px}
     input[type="text"]::placeholder{color:#9aa3cf}
-    input[type="text"]:focus{ box-shadow:0 0 0 4px var(--ring); border-color:#8fb7ff33 }
-    button.send{
-      padding:0 16px; border-radius:12px; border:1px solid #7aa7ff55; color:#0d122e;
-      background:linear-gradient(135deg,#6ea8ff,#a28bff); font-weight:700;
-      display:inline-flex; align-items:center; gap:8px; cursor:pointer;
-      box-shadow:0 10px 26px rgba(110,168,255,.35);
-    }
-    button.send:disabled{opacity:.5; cursor:not-allowed}
-
-    /* mobile */
-    @media (max-width:720px){
-      .card{ height:calc(100vh - 24px) }
-      .bubble{ max-width:92% }
-      header{ padding:12px }
-      .chat{ padding:14px }
-    }
+    input[type="text"]:focus{box-shadow:0 0 0 4px var(--ring);border-color:#8fb7ff33}
+    button.send{padding:0 16px;border-radius:12px;border:1px solid #7aa7ff55;color:#0d122e;background:linear-gradient(135deg,#6ea8ff,#a28bff);
+      font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 10px 26px rgba(110,168,255,.35)}
+    button.send:disabled{opacity:.5;cursor:not-allowed}
+    @media (max-width:720px){.card{height:calc(100vh - 24px)}.bubble{max-width:92%}header{padding:12px}.chat{padding:14px}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card" role="application" aria-label="St. Mary’s Parent Assistant chat">
+    <div class="card" role="application" aria-label="St. Mary’s Parent Assistant">
       <header>
         <span class="logo" aria-hidden="true"></span>
         <div class="brand">St. Mary’s Parent Assistant</div>
-        <div class="sub">Ask about admissions • fees • subjects</div>
+        <div class="sub">Admissions • Fees • Subjects • Policies</div>
       </header>
 
       <main id="chat" class="chat" tabindex="0" aria-live="polite">
-        <!-- initial greeting -->
         <div class="bubble bot">
           Hi! I’m the St. Mary’s Parent Assistant 😊<br/>
-          Ask me anything about <b>admissions</b>, <b>fees</b>, <b>subjects</b>, documents, curriculum, or policies.
-          <div class="hint">Try: “Documents for admission”, “Fees for Grade 11”, “A’ Level subjects”.</div>
+          Ask me about <b>admissions</b>, <b>fees</b>, <b>subjects</b>, required documents, timings, or policies.
+          <div class="hint">Try: “Documents for admission”, “Fees for Grade 11”, “A’ Level subjects”, “School timings”.</div>
         </div>
       </main>
 
@@ -136,25 +80,24 @@
         <div class="chips" id="chips">
           <button class="chip" data-q="What documents are required for admissions?">Documents</button>
           <button class="chip" data-q="Fees for Grade 11">Fees (G11)</button>
-          <button class="chip" data-q="Admission for Grade 11">Admission G11</button>
-          <button class="chip" data-q="Grade 9 subjects choices">Grade 9 subjects</button>
-          <button class="chip" data-q="A’ Level subjects">A’ Level</button>
+          <button class="chip" data-q="What are the school timings?">School timings</button>
+          <button class="chip" data-q="Who is the principal?">Principal</button>
+          <button class="chip" data-q="Where do I buy the uniform?">Uniform</button>
         </div>
-
         <form id="form" class="form" autocomplete="off">
           <input id="q" type="text" placeholder="Type your question…" required />
-          <button id="send" class="send" type="submit" aria-label="Send message">Send ↗</button>
+          <button id="send" class="send" type="submit" aria-label="Send">Send ↗</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- 🔧 Worker endpoint -->
+  <!-- Set your Worker URL -->
   <script>
-    const WORKER_URL = "https://delicate-cake-3610.gowriarunn2008.workers.dev/api/ask"; // ← change if yours differs
+    const WORKER_URL = "https://delicate-cake-3610.gowriarunn2008.workers.dev/api/ask"; // ← change if different
   </script>
 
-  <!-- 📚 Knowledge Base (same as we built earlier, trimmed comments) -->
+  <!-- Knowledge Base (complete) -->
   <script id="kb" type="application/json">
   {
     "school": {
@@ -168,6 +111,18 @@
         "principal": "Fr. Suresh Kumar SDB"
       }
     },
+    "contact": {
+      "postal_address": "St. Mary’s Catholic High School, P.O. Box: 1665, Fujairah, UAE",
+      "phone": "09-2282828",
+      "fax": "09-2281910",
+      "email": "secretary.principal-smf@smgeducation.org",
+      "note": "For anything not covered, please contact the school office."
+    },
+    "timings": {
+      "monday_thursday": "07:40 AM – 02:05 PM",
+      "friday": "07:25 AM – 11:20 AM",
+      "weekend": "Closed (Sat–Sun)"
+    },
     "vision": "To prepare innovative global leaders and realize the National Agenda by providing holistic, inclusive, quality and sustainable education.",
     "mission": [
       "Ensure academic excellence via continuous assessment, research, innovation and discovery.",
@@ -178,6 +133,7 @@
       "Strong parent & stakeholder collaboration."
     ],
     "admissions": {
+      "apply": "Parents should visit the school or contact the admission officer to apply.",
       "kg_age_rule": "KG1/KG2 applicants must be four years old on/before August 31 for September start.",
       "grade_tests": "Grades 1–9 admission is based on an entrance test (English & Mathematics ~1 hour each). Admission is competitive when applicants exceed seats.",
       "no_grade10": "No new admissions to Grade 10 as students prepare for London Board exams.",
@@ -252,26 +208,27 @@
         "For higher education in UAE: Arabic mandatory for all; Islamic mandatory for Muslims (MoE unified exams)."
       ]
     },
-    "equivalency_uae": [
-      "Complete Grade 12 (or equivalent).",
-      "Pass five O-level subjects (IGCSE/GCSE) grades A*–D (9–3), including Math; one science; English Language/Literature.",
-      "Pass two A-level/IAS/IAL subjects grades A*–E.",
-      "Arabic & Islamic (O’ and A’) are not counted among required subjects."
-    ],
+    "reports": {
+      "collection": "A Level / O Level / AS Level grades are collected from the Principal; lower grade report cards are distributed during PTM."
+    },
+    "facilities": {
+      "transport": "Transport available on set routes; seats subject to availability; follow bus safety rules.",
+      "uniform": "Uniform is mandatory and available on campus at the bookstore near reception.",
+      "canteen": "Canteen is available on campus."
+    },
     "policies": {
       "attendance": ["Regular attendance; follow timings.","Absences need valid reason/medical note.","Excess absence may affect promotion/exam eligibility."],
+      "leave": "Provide a leave letter to the class teacher.",
       "assessment_examination": ["Continuous assessment + formal exams per Edexcel & MoE.","Academic honesty required."],
       "homework": ["Homework reinforces learning; submit on time.","Parents should support routines."],
       "promotion_retention": ["Promotion considers performance, assessments, attendance, conduct.","Remedials may be advised before retention."],
       "uniform_discipline": ["Wear full uniform; neat appearance.","Respectful behavior; misconduct leads to disciplinary action."],
-      "transport": ["Transport on set routes; seats subject to availability.","Follow bus safety rules."],
-      "health_safety": ["Share medical conditions; keep vaccinations updated.","Sick students should stay home; report contagious conditions."]
-    },
-    "contact": { "note": "For anything not covered, please contact the school office." }
+      "health_safety": ["Share medical conditions; keep vaccinations updated.","Sick students should stay home; report contagious conditions."],
+      "support_contact": "For academic support, contact the class teacher or school office."
+    }
   }
   </script>
 
-  <!-- 🧠 App -->
   <script>
   const chat = document.getElementById('chat');
   const form = document.getElementById('form');
@@ -282,67 +239,45 @@
   function addBubble(text, me=false){
     const b=document.createElement('div');
     b.className='bubble ' + (me?'me':'bot');
-    b.innerHTML = text.replace(/\n/g,'<br>');
-    chat.appendChild(b);
-    chat.scrollTop = chat.scrollHeight;
-    return b;
+    b.innerHTML=text.replace(/\n/g,'<br>');
+    chat.appendChild(b); chat.scrollTop=chat.scrollHeight; return b;
   }
   let typingEl=null;
-  function showTyping(){
-    typingEl=document.createElement('div');
-    typingEl.className='bubble bot';
+  function showTyping(){ typingEl=document.createElement('div'); typingEl.className='bubble bot';
     typingEl.innerHTML=`<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
-    chat.appendChild(typingEl);
-    chat.scrollTop=chat.scrollHeight;
-  }
-  function hideTyping(){
-    if(typingEl){ typingEl.remove(); typingEl=null; }
+    chat.appendChild(typingEl); chat.scrollTop=chat.scrollHeight; }
+  function hideTyping(){ if(typingEl){typingEl.remove(); typingEl=null;} }
+
+  // session memory (very light)
+  const history = []; // {role, content}
+  const profile = JSON.parse(localStorage.getItem("smchs_profile") || "{}");
+  function rememberFrom(text){
+    const g=text.match(/\bgrade\s*(\d{1,2})\b/i);
+    if(g){profile.grade=g[1];localStorage.setItem("smchs_profile",JSON.stringify(profile));}
+    const kg=text.match(/\bkg\s*([12])\b/i);
+    if(kg){profile.grade=kg[1]==="1"?"KG1":"KG2";localStorage.setItem("smchs_profile",JSON.stringify(profile));}
   }
 
   async function ask(q){
-    // optimistic render
-    addBubble(q, true);
-    input.value='';
-    input.focus();
-
-    // call worker
+    addBubble(q,true); rememberFrom(q); input.value=''; input.focus(); showTyping();
+    const profileHint = profile.grade ? ` (profile: Grade ${profile.grade})` : '';
     try{
-      showTyping();
       const res = await fetch(WORKER_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ question:q, kb:KB })
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ question:q+profileHint, kb:KB, history })
       });
       hideTyping();
-      if(!res.ok){
-        addBubble("Sorry, I couldn’t reach the service. Please try again.", false);
-        return;
-      }
+      if(!res.ok){ addBubble("Sorry, I couldn’t reach the service. Please try again.", false); return; }
       const data = await res.json();
-      addBubble(data.answer || "Sorry, I don’t have that in the official info.", false);
-    }catch(e){
-      hideTyping();
-      addBubble("Network error. Please check your connection and try again.", false);
-    }
+      addBubble(data.answer || "I don’t have that in the official info. Please contact the school office.", false);
+      history.push({role:"user", content:q});
+      history.push({role:"assistant", content:data.answer});
+    }catch(e){ hideTyping(); addBubble("Network error. Please try again.", false); }
   }
 
-  // submit
-  form.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const q=input.value.trim();
-    if(!q) return;
-    ask(q);
-  });
-
-  // chips
-  chips.addEventListener('click', (e)=>{
-    const btn=e.target.closest('[data-q]');
-    if(!btn) return;
-    ask(btn.dataset.q);
-  });
-
-  // greet focus
-  setTimeout(()=> input.focus(), 250);
+  form.addEventListener('submit', e=>{e.preventDefault(); const q=input.value.trim(); if(q) ask(q);});
+  chips.addEventListener('click', e=>{const btn=e.target.closest('[data-q]'); if(btn) ask(btn.dataset.q);});
+  setTimeout(()=>input.focus(),200);
   </script>
 </body>
 </html>
