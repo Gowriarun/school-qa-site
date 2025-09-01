@@ -1,184 +1,348 @@
-<script id="kb" type="application/json">
-{
-  "school": {
-    "name": "St. Mary’s Catholic High School, Fujairah",
-    "location": "Fujairah, UAE",
-    "motto": "The End Crowns the Work",
-    "bishop_message": "St. Mary’s Fujairah has provided high-quality education and values to thousands of children for 15+ years, appreciating UAE’s uniqueness while maximizing the spiritual, intellectual, emotional, physical and artistic potential of all members through value-based learning by committed, efficient, qualified staff.",
-    "principal_message": "We aim to make a positive difference in students’ lives, encouraging them to think, collaborate and contribute, offering high quality education that helps them realize their potential aligned with the UAE Vision.",
-    "history": [
-      "Founded in 2002 under Bishop Giovanni Bernardo Gremoli, initially supported by Comboni Sisters until 2008.",
-      "Introduced GCSE UK curriculum in 2002 for international students and CBSE in 2003 for Indian population needs.",
-      "Under Bishop Paolo Martinelli, administrative responsibilities entrusted to the Salesians of Don Bosco (Chennai Province) in 2008.",
-      "Renowned for discipline and preparation, aligned with the school’s mission to nurture globally competent citizens."
-    ],
-    "leadership": {
-      "sponsor": "H.E. Dr. Mohamed Saeed Al Kindi",
-      "owner": "His Excellency Bishop Paolo Martinelli",
-      "managing_director": "Mr. Joseph Flynn",
-      "principal": "Fr. Suresh Kumar SDB"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>St. Mary’s Parent Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0f1222;           /* deep indigo bg */
+      --panel:#141833;        /* chat surface */
+      --muted:#a9b1d6;
+      --text:#e9edff;
+      --bubble:#1b2250;       /* bot bubble */
+      --me:#2b377f;           /* my bubble */
+      --accent:#6ea8ff;       /* buttons/links */
+      --border:rgba(255,255,255,.08);
+      --ring:rgba(110,168,255,.25);
     }
-  },
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:radial-gradient(1200px 900px at 80% -10%, #1d2555 0%, #111432 45%, #0f1222 100%);
+      font-family:Poppins,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
 
-  "vision": "To prepare innovative global leaders and realize the National Agenda by providing holistic, inclusive, quality and sustainable education.",
-  "mission": [
-    "Ensure academic excellence via continuous assessment, research, innovation, discovery.",
-    "Appreciate UAE’s uniqueness by understanding and respecting its culture and values.",
-    "Maximize spiritual, intellectual, emotional, physical and artistic potential through value-based learning delivered by committed, efficient, qualified staff.",
-    "Cater to students of differing abilities through effective planning and competency-based teaching.",
-    "Contribute compassionately to society with humanitarian values and responsibility.",
-    "Communicate and collaborate with parents and stakeholders to ensure student wellbeing and growth."
-  ],
+    /* shell */
+    .wrap{
+      min-height:100%;
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .card{
+      width:min(960px,100%);
+      height:min(82vh,820px);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.02)) , var(--panel);
+      border:1px solid var(--border); border-radius:20px;
+      box-shadow:0 30px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04) inset;
+      display:grid; grid-template-rows:auto 1fr auto; overflow:hidden;
+    }
 
-  "admissions": {
-    "kg_age_rule": "KG1/KG2 applicants must be four years old on/before August 31 for September start.",
-    "grade_tests": "For Grades 1–9: entrance test in English and Mathematics (~1 hour each). Admission is competitive when applicants exceed available seats.",
-    "no_grade10": "No new admissions to Grade 10 as students prepare for London Board examinations.",
-    "grade11": "Enrollment begins in August after O’Level/Grade 10 results (UK curriculum). Eligible for students who passed Board Exams with minimum A*/A (9–7).",
-    "grade12": "Admission to Grade 12 (IAL) is restricted to students who successfully completed International Advanced Subsidiary (IAS) with minimum grades A and B.",
-    "a_level_enrollment": "A’ Level enrollment starts after O’/Grade 10 results. To be eligible, students should have completed O’Level/Grade 10 with six subjects including English language and Mathematics and secure Grade A in the subjects chosen for A’.",
-    "results_contact": "Only selected applicants are contacted with date/time for registration.",
-    "subject_change_policy": "Once choices are made, it is not possible to change subjects during the year. The school will inform parents only if adjustments are required.",
-    "docs_required": [
-      "Child’s passport + valid visa page",
-      "Birth certificate",
-      "Vaccination card (for KG1/2 and Grade 1)",
-      "Emirates ID",
-      "Six passport-size photographs",
-      "Latest report card and reference letter from previous school",
-      "Duly attested Transfer/School Leaving Certificate from previous school",
-      "Bonafide certificate from previous school (Grade 1–8)",
-      "Medical record book from previous school",
-      "Family book (UAE nationals only)"
-    ],
-    "transfer_notes": [
-      "Transfers within UAE: certificates must be attested by the Ministry of Education in the concerned Educational Zone.",
-      "Students coming from abroad: certificates must be attested by (1) Regional Educational Office in the respective country, (2) the country’s Embassy/Consulate in the UAE, and (3) the UAE Ministry of Foreign Affairs."
-    ]
-  },
+    /* top bar */
+    header{
+      display:flex; align-items:center; gap:12px;
+      padding:14px 16px; border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(255,255,255,.04),transparent);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.3px;
+    }
+    .logo{
+      height:28px; width:28px; border-radius:8px;
+      background:linear-gradient(135deg,#6ea8ff,#a28bff); box-shadow:0 0 0 4px rgba(110,168,255,.12);
+      display:inline-block;
+    }
+    .sub{margin-left:auto;color:var(--muted); font-size:12px}
 
-  "fees_per_year_aed": {
-    "KG1-2": 7270,
-    "G1-3": 8100,
-    "G4-6": 9100,
-    "G7-8": 11200,
-    "G9-10": 13100,
-    "G11-12_Alevel": 15900,
-    "installments_note": "Tuition is paid in three installments; see official table for term amounts."
-  },
+    /* chat */
+    .chat{
+      position:relative; overflow:auto; padding:18px; display:flex; flex-direction:column; gap:12px;
+      scroll-behavior:smooth; background:
+        radial-gradient(600px 260px at 10% -10%, rgba(110,168,255,.08), transparent 70%),
+        radial-gradient(600px 260px at 110% 10%, rgba(162,139,255,.08), transparent 70%);
+    }
+    .bubble{
+      max-width:min(78ch, 86%);
+      padding:12px 14px; border-radius:16px; line-height:1.55; font-size:15px;
+      border:1px solid var(--border); background:var(--bubble);
+      box-shadow:0 6px 24px rgba(0,0,0,.18);
+    }
+    .me{ margin-left:auto; background:var(--me) }
+    .bot{ margin-right:auto }
+    .hint{ color:var(--muted); font-size:12px; margin-top:4px }
+    .typing{ display:inline-flex; gap:6px; align-items:center }
+    .dot{ width:6px; height:6px; border-radius:50%; background:#c9d5ff; opacity:.6; animation:blink 1.3s infinite }
+    .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
+    @keyframes blink { 0%,80%,100%{opacity:.2} 30%{opacity:.9} }
 
-  "curriculum": {
-    "board": "UK British Curriculum; Pearson Edexcel London Board centre.",
-    "stages": [
-      "EYFS",
-      "Gr2–5: International Primary",
-      "Gr6–8: Key Stage 3 International Lower Secondary",
-      "Gr9–10: O’Level – GCSE and IGCSE",
-      "Gr11: International Advanced Subsidiary (IAS)",
-      "Gr12: International Advanced Level (IAL)"
-    ],
-    "medium": "English",
-    "arabic_islamic": "Arabic is mandatory for all students from Grade 1–9 (and compulsory for Arabs through Grade 12). Islamic Studies is compulsory for Muslim students from Grade 1–12.",
-    "secondary_notes": [
-      "From Grade 9 onward, students begin preparing for GCSE/IGCSE and later IAS/IAL qualifications.",
-      "Subject concentration (science or arts/commerce) starts from Grade 9, finalized at the end of Grade 8."
-    ]
-  },
+    /* dock */
+    .dock{
+      padding:12px; border-top:1px solid var(--border); background:linear-gradient(0deg,rgba(255,255,255,.03),transparent);
+      display:grid; gap:10px;
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap }
+    .chip{
+      background:transparent; border:1px solid var(--border); color:var(--muted);
+      padding:8px 10px; border-radius:999px; font-size:12px; cursor:pointer;
+    }
+    .chip:hover{ border-color:#8fb7ff33; color:#d9e4ff; box-shadow:0 0 0 4px var(--ring) }
 
-  "subjects": {
-    "kg": {
-      "KG1": ["English: poetry, reading & written, storytelling","Number Work: fundamentals & numeracy","General Knowledge: broaden world knowledge"],
-      "KG2": ["English: poetry, reading & written, storytelling","Number Work","General Knowledge","Arabic","Year 1 syllabus bridge from UK National Curriculum"]
+    .form{ display:flex; gap:10px }
+    input[type="text"]{
+      flex:1; padding:14px 14px; border-radius:12px; border:1px solid var(--border);
+      background:#0f1330; color:var(--text); outline:none; font-size:15px;
+    }
+    input[type="text"]::placeholder{color:#9aa3cf}
+    input[type="text"]:focus{ box-shadow:0 0 0 4px var(--ring); border-color:#8fb7ff33 }
+    button.send{
+      padding:0 16px; border-radius:12px; border:1px solid #7aa7ff55; color:#0d122e;
+      background:linear-gradient(135deg,#6ea8ff,#a28bff); font-weight:700;
+      display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+      box-shadow:0 10px 26px rgba(110,168,255,.35);
+    }
+    button.send:disabled{opacity:.5; cursor:not-allowed}
+
+    /* mobile */
+    @media (max-width:720px){
+      .card{ height:calc(100vh - 24px) }
+      .bubble{ max-width:92% }
+      header{ padding:12px }
+      .chat{ padding:14px }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="St. Mary’s Parent Assistant chat">
+      <header>
+        <span class="logo" aria-hidden="true"></span>
+        <div class="brand">St. Mary’s Parent Assistant</div>
+        <div class="sub">Ask about admissions • fees • subjects</div>
+      </header>
+
+      <main id="chat" class="chat" tabindex="0" aria-live="polite">
+        <!-- initial greeting -->
+        <div class="bubble bot">
+          Hi! I’m the St. Mary’s Parent Assistant 😊<br/>
+          Ask me anything about <b>admissions</b>, <b>fees</b>, <b>subjects</b>, documents, curriculum, or policies.
+          <div class="hint">Try: “Documents for admission”, “Fees for Grade 11”, “A’ Level subjects”.</div>
+        </div>
+      </main>
+
+      <div class="dock">
+        <div class="chips" id="chips">
+          <button class="chip" data-q="What documents are required for admissions?">Documents</button>
+          <button class="chip" data-q="Fees for Grade 11">Fees (G11)</button>
+          <button class="chip" data-q="Admission for Grade 11">Admission G11</button>
+          <button class="chip" data-q="Grade 9 subjects choices">Grade 9 subjects</button>
+          <button class="chip" data-q="A’ Level subjects">A’ Level</button>
+        </div>
+
+        <form id="form" class="form" autocomplete="off">
+          <input id="q" type="text" placeholder="Type your question…" required />
+          <button id="send" class="send" type="submit" aria-label="Send message">Send ↗</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔧 Worker endpoint -->
+  <script>
+    const WORKER_URL = "https://delicate-cake-3610.gowriarunn2008.workers.dev/api/ask"; // ← change if yours differs
+  </script>
+
+  <!-- 📚 Knowledge Base (same as we built earlier, trimmed comments) -->
+  <script id="kb" type="application/json">
+  {
+    "school": {
+      "name": "St. Mary’s Catholic High School, Fujairah",
+      "location": "Fujairah, UAE",
+      "motto": "The End Crowns the Work",
+      "leadership": {
+        "sponsor": "H.E. Dr. Mohamed Saeed Al Kindi",
+        "owner": "His Excellency Bishop Paolo Martinelli",
+        "managing_director": "Mr. Joseph Flynn",
+        "principal": "Fr. Suresh Kumar SDB"
+      }
     },
-    "primary_lower": {
-      "Grade I & II": ["English","Maths","Science","Islamic Studies (Arabic for Arabs / English for non-Arabs)","Religious Studies","Higher Arabic (Arabs) / Lower Arabic (Non-Arabs)","Social Studies (Arabic for Arabs / English for Non-Arabs)","Music","Moral & Social Culture (Arabic for Arabs / English for Non-Arabs)","Art","Sports"],
-      "Grade III": ["English Language","Maths","Geography","Science","Islamic Studies (Arabic for Arabs / English for Non-Arabs)","Religious Studies","Higher/Lower Arabic","Social Studies (Arabic for Arabs / English for Non-Arabs)","Music","Moral & Social Culture","Art","Sports"],
-      "Grade IV": ["English (Language & Literature)","Maths","Science","History","Geography","Information Technology","Social Studies (Arabic for Arabs / English for Non-Arabs)","Higher/Lower Arabic","Islamic Studies (Arabic for Arabs / English for Non-Arabs)","Religious Studies","Moral & Social Culture","Art","Sports"],
-      "Grade V & VI": ["English (Language & Literature)","Maths","Science","History","Geography","Information Technology","Global Citizenship or Urdu","Social Studies (Arabic for Arabs / English for Non-Arabs)","Higher/Lower Arabic","Islamic Studies (Arabic for Arabs / English for Non-Arabs)","Moral & Social Culture","Art","Sports"]
+    "vision": "To prepare innovative global leaders and realize the National Agenda by providing holistic, inclusive, quality and sustainable education.",
+    "mission": [
+      "Ensure academic excellence via continuous assessment, research, innovation and discovery.",
+      "Respect UAE culture and values.",
+      "Value-based learning delivered by committed, qualified staff.",
+      "Cater to differing abilities via competency-based teaching.",
+      "Humanitarian values and responsibility.",
+      "Strong parent & stakeholder collaboration."
+    ],
+    "admissions": {
+      "kg_age_rule": "KG1/KG2 applicants must be four years old on/before August 31 for September start.",
+      "grade_tests": "Grades 1–9 admission is based on an entrance test (English & Mathematics ~1 hour each). Admission is competitive when applicants exceed seats.",
+      "no_grade10": "No new admissions to Grade 10 as students prepare for London Board exams.",
+      "grade11": "Enrollment starts in August after O’/Grade 10 results. For UK curriculum students who passed Board Exams with minimum A*/A (9–7).",
+      "grade12": "Admission to Grade 12 (IAL) is for students who completed IAS with minimum grades A and B.",
+      "a_level_enrollment": "Eligible students: Completed O’Level/Grade 10 with six subjects including English and Math and secure Grade A in chosen A’ subjects.",
+      "results_contact": "Only selected applicants will be contacted with registration details.",
+      "subject_change_policy": "Once choices are made, subjects cannot be changed during the year unless the school contacts parents for adjustments.",
+      "docs_required": [
+        "Child’s passport + visa page",
+        "Birth certificate",
+        "Vaccination card (KG1/2 & Grade 1)",
+        "Emirates ID",
+        "Six passport photos",
+        "Latest report card + reference letter from previous school",
+        "Attested Transfer/School Leaving Certificate",
+        "Bonafide certificate (Grade 1–8)",
+        "Medical record book",
+        "Family book (UAE nationals only)"
+      ],
+      "transfer_notes": [
+        "Within UAE: attest certificates at the MoE in the concerned Educational Zone.",
+        "From abroad: attest at (1) Regional Education Office, (2) country’s Embassy/Consulate in UAE, (3) UAE Ministry of Foreign Affairs."
+      ]
     },
-    "middle": {
-      "Grade VII & VIII (left)": ["English (Language & Literature)","Mathematics","Science","Social Studies (Arabic for Arabs) & in English (Non-Arabs)","History","Geography","Computer Science","French or Urdu","Moral & Social Culture (Arabic for Arabs) & in English (Non-Arabs)","Art","Sports"],
-      "Grade VII & VIII (right)": ["French or Urdu","Social Studies (Arabic for Arabs) & in English (for Non-Arabs)","Higher Arabic or Lower Arabic","Islamic Studies (Arabic for Arabs) & in English (for Non-Arabs) – Religious Studies","Moral & Social Culture (Arabic for Arabs) & in English (for Non-Arabs)","Computer Science"]
+    "fees_per_year_aed": {
+      "KG1-2": 7270,
+      "G1-3": 8100,
+      "G4-6": 9100,
+      "G7-8": 11200,
+      "G9-10": 13100,
+      "G11-12_Alevel": 15900,
+      "installments_note": "Paid in three installments as per official schedule."
     },
-    "grade9_minimum": "Minimum 9 subjects in Grade 9.",
-    "gcse_compulsory": [
-      "English Language (Edexcel IGCSE)",
-      "Religious Studies / Islamic Studies (Arabic/English) – mandatory per MoE; board exam available for Religious & Islamic Studies (Eng.)",
-      "Social Studies – till Grade 9 only",
-      "Mathematics (IGCSE)",
-      "Higher Arabic / Lower Arabic",
-      "MEP (Arabic) / MEP (English); MEP is compulsory till Grade 12",
-      "Arabic is compulsory for Arabs till Grade 12 (Arabic board exam available as GCSE)"
+    "curriculum": {
+      "board": "UK British Curriculum; Pearson Edexcel centre.",
+      "stages": ["EYFS","Gr2–5 International Primary","Gr6–8 KS3 Lower Secondary","Gr9–10 GCSE/IGCSE","Gr11 IAS","Gr12 IAL"],
+      "medium": "English",
+      "arabic_islamic": "Arabic mandatory G1–9 (and for Arabs until G12). Islamic Studies compulsory for Muslim students G1–12.",
+      "secondary_notes": [
+        "From G9 students prepare for IGCSE/GCSE and later IAS/IAL.",
+        "Subject concentration (science or arts/commerce) begins G9, finalized end of G8."
+      ]
+    },
+    "subjects": {
+      "grade9_minimum": "Minimum 9 subjects in Grade 9.",
+      "gcse_compulsory": [
+        "English Language (IGCSE)",
+        "Religious/Islamic Studies (per MoE)",
+        "Social Studies (until G9)",
+        "Mathematics (IGCSE)",
+        "Higher/Lower Arabic",
+        "MEP (Arabic/English) compulsory until G12 (Arabic compulsory for Arabs until G12; Arabic board exam available as GCSE)"
+      ],
+      "gcse_optional": [
+        "English Literature (IGCSE)",
+        "ICT (IGCSE)",
+        "Global Citizenship (IGCSE) or Urdu (GCSE)"
+      ],
+      "pairs": ["Chemistry or Accounts","Physics or Economics","Biology or Business Studies"],
+      "rules": [
+        "After selection, subjects cannot be changed/dropped.",
+        "Choose according to university and destination country.",
+        "Classes depend on sufficient demand."
+      ],
+      "a_level": [
+        "Math","Physics or Economics","Chemistry or Accounts","Biology or Business Studies",
+        "Islam (English or Arabic)","Higher/Lower Arabic"
+      ],
+      "a_level_rules": [
+        "Choose at least two A’ Level subjects (excluding Arabic & Islamic).",
+        "For higher education in UAE: Arabic mandatory for all; Islamic mandatory for Muslims (MoE unified exams)."
+      ]
+    },
+    "equivalency_uae": [
+      "Complete Grade 12 (or equivalent).",
+      "Pass five O-level subjects (IGCSE/GCSE) grades A*–D (9–3), including Math; one science; English Language/Literature.",
+      "Pass two A-level/IAS/IAL subjects grades A*–E.",
+      "Arabic & Islamic (O’ and A’) are not counted among required subjects."
     ],
-    "gcse_optional": [
-      "English Literature (IGCSE)",
-      "ICT (IGCSE)",
-      "Global Citizenship (IGCSE) or Urdu (GCSE)",
-      "Plus science/econ/business choices listed below"
-    ],
-    "pairs": ["Chemistry or Accounts","Physics or Economics","Biology or Business Studies"],
-    "rules": [
-      "Once choices are made, the subject cannot be changed/dropped during the year.",
-      "Make choices according to the requirements of your intended university and destination country.",
-      "Class availability depends on sufficient number of students opting."
-    ],
-    "a_level": [
-      "Math",
-      "Physics or Economics (subject to demand)",
-      "Chemistry or Accounts (subject to demand)",
-      "Biology or Business Studies (subject to demand)",
-      "Islam (English or Arabic)",
-      "Higher Arabic / Lower Arabic"
-    ],
-    "a_level_rules": [
-      "Choose at least two A’ Level subjects (excluding Arabic & Islamic).",
-      "Students intending to continue higher education in UAE must study Arabic (mandatory for all) and Islamic (for Muslim students) and appear for MoE unified exams."
-    ]
-  },
-
-  "equivalency_uae": [
-    "Complete Grade 12 (or equivalent).",
-    "Pass five (5) subjects at ordinary level (IGCSE or GCSE) with grades A*–D (or 9–3). Must include: Mathematics; one science (Physics, Chemistry, Biology or dual); and English Language or English Literature.",
-    "Pass two (2) subjects at higher/advanced level (A-Level / IAS / IAL) with grades A*–E.",
-    "Arabic & Islamic (O’ and A’ levels) are not counted among the required subjects."
-  ],
-
-  "policies": {
-    "attendance": [
-      "Regular attendance is expected; follow school timings strictly.",
-      "Absences require valid reason/medical note; inform the office in advance where possible.",
-      "Excessive absence may affect promotion/exam eligibility (follow MoE guidelines)."
-    ],
-    "assessment_examination": [
-      "Continuous assessment + formal examinations as per Pearson Edexcel & MoE schedules.",
-      "Academic honesty is expected; malpractice may lead to cancellation and disciplinary action."
-    ],
-    "homework": [
-      "Homework reinforces classroom learning; submit on time.",
-      "Parents are encouraged to support routine and provide a quiet study environment."
-    ],
-    "promotion_retention": [
-      "Promotion decisions consider overall performance, assessments, attendance, and conduct per school/MoE norms.",
-      "Support plans/remedials may be advised before retention is considered."
-    ],
-    "uniform_discipline": [
-      "Full school uniform must be worn; maintain neat appearance; PE uniform on designated days.",
-      "Respectful behavior is expected: towards staff, peers, property and community.",
-      "Use of prohibited items or misconduct leads to disciplinary measures as per school code."
-    ],
-    "transport": [
-      "School transport operates on designated routes; seats subject to availability.",
-      "Students must follow bus safety rules and staff instructions at all times."
-    ],
-    "health_safety": [
-      "Parents must disclose medical conditions and keep vaccinations/records updated.",
-      "Sick students should remain at home; report contagious conditions promptly.",
-      "Emergency procedures and child safeguarding policies are in place."
-    ]
-  },
-
-  "contact": {
-    "note": "For queries not covered in this info, please contact the school office."
+    "policies": {
+      "attendance": ["Regular attendance; follow timings.","Absences need valid reason/medical note.","Excess absence may affect promotion/exam eligibility."],
+      "assessment_examination": ["Continuous assessment + formal exams per Edexcel & MoE.","Academic honesty required."],
+      "homework": ["Homework reinforces learning; submit on time.","Parents should support routines."],
+      "promotion_retention": ["Promotion considers performance, assessments, attendance, conduct.","Remedials may be advised before retention."],
+      "uniform_discipline": ["Wear full uniform; neat appearance.","Respectful behavior; misconduct leads to disciplinary action."],
+      "transport": ["Transport on set routes; seats subject to availability.","Follow bus safety rules."],
+      "health_safety": ["Share medical conditions; keep vaccinations updated.","Sick students should stay home; report contagious conditions."]
+    },
+    "contact": { "note": "For anything not covered, please contact the school office." }
   }
-}
-</script>
+  </script>
+
+  <!-- 🧠 App -->
+  <script>
+  const chat = document.getElementById('chat');
+  const form = document.getElementById('form');
+  const input = document.getElementById('q');
+  const chips = document.getElementById('chips');
+  const KB = document.getElementById('kb').textContent;
+
+  function addBubble(text, me=false){
+    const b=document.createElement('div');
+    b.className='bubble ' + (me?'me':'bot');
+    b.innerHTML = text.replace(/\n/g,'<br>');
+    chat.appendChild(b);
+    chat.scrollTop = chat.scrollHeight;
+    return b;
+  }
+  let typingEl=null;
+  function showTyping(){
+    typingEl=document.createElement('div');
+    typingEl.className='bubble bot';
+    typingEl.innerHTML=`<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
+    chat.appendChild(typingEl);
+    chat.scrollTop=chat.scrollHeight;
+  }
+  function hideTyping(){
+    if(typingEl){ typingEl.remove(); typingEl=null; }
+  }
+
+  async function ask(q){
+    // optimistic render
+    addBubble(q, true);
+    input.value='';
+    input.focus();
+
+    // call worker
+    try{
+      showTyping();
+      const res = await fetch(WORKER_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ question:q, kb:KB })
+      });
+      hideTyping();
+      if(!res.ok){
+        addBubble("Sorry, I couldn’t reach the service. Please try again.", false);
+        return;
+      }
+      const data = await res.json();
+      addBubble(data.answer || "Sorry, I don’t have that in the official info.", false);
+    }catch(e){
+      hideTyping();
+      addBubble("Network error. Please check your connection and try again.", false);
+    }
+  }
+
+  // submit
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const q=input.value.trim();
+    if(!q) return;
+    ask(q);
+  });
+
+  // chips
+  chips.addEventListener('click', (e)=>{
+    const btn=e.target.closest('[data-q]');
+    if(!btn) return;
+    ask(btn.dataset.q);
+  });
+
+  // greet focus
+  setTimeout(()=> input.focus(), 250);
+  </script>
+</body>
+</html>
