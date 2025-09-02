@@ -4,456 +4,187 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>St. Mary’s Parent Assistant</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1222; --panel:#141833; --muted:#a9b1d6; --text:#e9edff;
-      --bubble:#1b2250; --me:#2b377f; --accent:#6ea8ff; --border:rgba(255,255,255,.08);
-      --ring:rgba(110,168,255,.25);
+      --bg:#0f1424;
+      --panel:#141b34;
+      --ink:#e9edff;
+      --ink-dim:#b7bfdd;
+      --brand:#6aa6ff;
+      --accent:#9aa8ff;
+      --chip:#1d2646;
+      --you:#3556f0;
+      --send:#8fb4ff;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;background:radial-gradient(1200px 900px at 80% -10%, #1d2555 0%, #111432 45%, #0f1222 100%);
-      font-family:Poppins,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      margin:0;background:radial-gradient(1200px 1200px at 80% -20%,#1a2452 0%,#0f1424 60%);
+      color:var(--ink);font:400 16px/1.5 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      display:flex;align-items:center;justify-content:center;
     }
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
+    .app{
+      width:min(980px,100%);
+      height:100vh;
+      display:flex;flex-direction:column;
+    }
+    header{
+      padding:18px 20px;display:flex;align-items:center;gap:12px;
+    }
+    .brand{
+      font-weight:700;letter-spacing:.2px;
+      background:linear-gradient(90deg,#b7c7ff,#6aa6ff 60%,#8bf0ff);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      font-size:20px
+    }
     .card{
-      width:min(960px,100%); height:min(82vh,820px);
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.02)),var(--panel);
-      border:1px solid var(--border); border-radius:20px; overflow:hidden;
-      display:grid; grid-template-rows:auto 1fr auto;
-      box-shadow:0 30px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04) inset;
+      background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:18px 20px;margin:8px 16px;
     }
-    header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);
-      background:linear-gradient(180deg,rgba(255,255,255,.04),transparent)}
-    .logo{height:28px;width:28px;border-radius:8px;background:linear-gradient(135deg,#6ea8ff,#a28bff);box-shadow:0 0 0 4px rgba(110,168,255,.12)}
-    .brand{font-weight:600;letter-spacing:.3px}
-    .sub{margin-left:auto;color:var(--muted);font-size:12px}
-
-    .chat{position:relative;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;background:
-      radial-gradient(600px 260px at 10% -10%, rgba(110,168,255,.08), transparent 70%),
-      radial-gradient(600px 260px at 110% 10%, rgba(162,139,255,.08), transparent 70%)}
-    .bubble{max-width:min(78ch,86%);padding:12px 14px;border-radius:16px;line-height:1.55;font-size:15px;border:1px solid var(--border);
-      background:var(--bubble);box-shadow:0 6px 24px rgba(0,0,0,.18)}
-    .me{margin-left:auto;background:var(--me)}
-    .bot{margin-right:auto}
-    .hint{color:var(--muted);font-size:12px;margin-top:4px}
-    .typing{display:inline-flex;gap:6px;align-items:center}
-    .dot{width:6px;height:6px;border-radius:50%;background:#c9d5ff;opacity:.6;animation:blink 1.3s infinite}
-    .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
-    @keyframes blink{0%,80%,100%{opacity:.2}30%{opacity:.9}}
-
-    .dock{padding:12px;border-top:1px solid var(--border);background:linear-gradient(0deg,rgba(255,255,255,.03),transparent);display:grid;gap:10px}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{background:transparent;border:1px solid var(--border);color:var(--muted);padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer}
-    .chip:hover{border-color:#8fb7ff33;color:#d9e4ff;box-shadow:0 0 0 4px var(--ring)}
-    .form{display:flex;gap:10px}
-    input[type="text"]{flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:#0f1330;color:var(--text);outline:none;font-size:15px}
-    input[type="text"]::placeholder{color:#9aa3cf}
-    input[type="text"]:focus{box-shadow:0 0 0 4px var(--ring);border-color:#8fb7ff33}
-    button.send{padding:0 16px;border-radius:12px;border:1px solid #7aa7ff55;color:#0d122e;background:linear-gradient(135deg,#6ea8ff,#a28bff);
-      font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 10px 26px rgba(110,168,255,.35)}
-    button.send:disabled{opacity:.5;cursor:not-allowed}
-    @media (max-width:720px){.card{height:calc(100vh - 24px)}.bubble{max-width:92%}header{padding:12px}.chat{padding:14px}}
+    .system-welcome{
+      margin:12px 16px 4px;border-radius:var(--radius);background:#162048;color:var(--ink);
+      padding:18px 20px;box-shadow:var(--shadow);
+    }
+    .system-welcome .small{color:var(--ink-dim);font-size:14px;margin-top:10px}
+    .chat{
+      flex:1;overflow:auto;padding:10px 12px 4px 12px;
+      scroll-behavior:smooth;
+    }
+    .msg{max-width:85%;padding:14px 16px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.25);margin:10px 8px;white-space:pre-wrap}
+    .bot{background:#17204a;color:var(--ink);border-bottom-left-radius:6px}
+    .you{background:var(--you);color:#fff;margin-left:auto;border-bottom-right-radius:6px}
+    .row{display:flex}
+    .dock{
+      padding:10px 12px 16px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.25));
+      position:sticky;bottom:0;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 16px 10px}
+    .chip{
+      border:1px solid rgba(255,255,255,.1);
+      background:var(--chip);color:var(--ink);padding:8px 12px;border-radius:999px;
+      font-size:14px;cursor:pointer;transition:.15s;user-select:none
+    }
+    .chip:hover{transform:translateY(-1px);background:#223060}
+    form{display:flex;gap:10px;margin:0 16px}
+    input[type=text]{
+      flex:1;border:none;outline:none;padding:16px 16px;border-radius:12px;
+      background:#121a39;color:var(--ink);font-size:16px;
+      border:1px solid rgba(255,255,255,.08)
+    }
+    button{
+      border:none;background:var(--send);color:#00122a;font-weight:700;
+      padding:0 22px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow);min-width:92px
+    }
+    button:disabled{filter:grayscale(.5);opacity:.6;cursor:not-allowed}
+    .foot{
+      text-align:center;color:var(--ink-dim);font-size:12px;margin:6px 0 12px
+    }
+    @media (max-width:640px){
+      .msg{max-width:100%}
+      button{min-width:72px}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" role="application" aria-label="St. Mary’s Parent Assistant">
-      <header>
-        <span class="logo" aria-hidden="true"></span>
-        <div class="brand">St. Mary’s Parent Assistant</div>
-        <div class="sub">Admissions • Fees • Subjects • Policies</div>
-      </header>
+  <div class="app">
+    <header>
+      <div class="brand">St. Mary’s • Parent Assistant</div>
+    </header>
 
-      <main id="chat" class="chat" tabindex="0" aria-live="polite">
-        <div class="bubble bot">
-          Hi! I’m the St. Mary’s Parent Assistant 😊<br/>
-          Ask me about <b>admissions</b>, <b>fees</b>, <b>subjects</b>, required documents, timings, or policies.
-          <div class="hint">Try: “Documents for admission”, “Fees for Grade 11”, “A’ Level subjects”, “School timings”.</div>
-        </div>
-      </main>
+    <div class="system-welcome card" id="welcome">
+      <div style="font-size:18px"><strong>Hi!</strong> I’m the St. Mary’s Parent Assistant 😊</div>
+      <div>Ask about <strong>admissions</strong>, <strong>fees</strong>, <strong>subjects</strong>, documents, timings, or policies.</div>
+      <div class="small">Try: “Documents for admission”, “Fees for Grade 11”, “A’ Level subjects”, “School timings”.</div>
+    </div>
 
-      <div class="dock">
-        <div class="chips" id="chips">
-          <button class="chip" data-q="What documents are required for admissions?">Documents</button>
-          <button class="chip" data-q="Fees for Grade 11">Fees (G11)</button>
-          <button class="chip" data-q="What are the school timings?">School timings</button>
-          <button class="chip" data-q="Who is the principal?">Principal</button>
-          <button class="chip" data-q="Where do I buy the uniform?">Uniform</button>
-        </div>
-        <form id="form" class="form" autocomplete="off">
-          <input id="q" type="text" placeholder="Type your question…" required />
-          <button id="send" class="send" type="submit" aria-label="Send">Send ↗</button>
-        </form>
-      </div>
+    <main id="chat" class="chat" aria-live="polite"></main>
+
+    <div class="dock">
+      <div class="chips" id="chips"></div>
+      <form id="form">
+        <input id="input" type="text" placeholder="Type your question…" autocomplete="off" />
+        <button id="send" type="submit">Send ↗</button>
+      </form>
+      <div class="foot">Answers are specific to St. Mary’s Catholic High School, Fujairah.</div>
     </div>
   </div>
 
-  <!-- Set your Worker URL -->
   <script>
-    const WORKER_URL = "https://delicate-cake-3610.gowriarunn2008.workers.dev/api/ask"; // ← change if different
-  </script>
+    const API_URL = "https://YOUR-WORKER-SUBDOMAIN.workers.dev/api/ask"; // <— replace with your Worker URL
+    const chat = document.getElementById('chat');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    const chips = document.getElementById('chips');
 
-  <!-- Knowledge Base (complete) -->
-  <script id="kb" type="application/json">
-{
-  "school": {
-    "name": "St. Mary’s Catholic High School, Fujairah",
-    "location": "Fujairah, UAE",
-    "motto": "The End Crowns the Work",
-    "leadership": {
-      "sponsor": "H.E. Dr. Mohamed Saeed Al Kindi",
-      "owner": "His Excellency Bishop Paolo Martinelli",
-      "managing_director": "Mr. Joseph Flynn",
-      "principal": "Fr. Suresh Kumar SDB"
+    // session id (persisted)
+    const SID_KEY = "smf_parent_sid";
+    let sessionId = localStorage.getItem(SID_KEY);
+    if(!sessionId){
+      sessionId = self.crypto.randomUUID();
+      localStorage.setItem(SID_KEY, sessionId);
     }
-  },
 
-  "contact": {
-    "postal_address": "St. Mary’s Catholic High School, P.O. Box: 1665, Fujairah, UAE",
-    "phone": "09-2282828",
-    "fax": "09-2281910",
-    "email": "secretary.principal-smf@smgeducation.org",
-    "note": "If your question isn’t covered, please contact the school office and we’ll be happy to help."
-  },
+    const SUGGESTIONS = [
+      "Documents for admission",
+      "Fees for Grade 11",
+      "Subjects for Grade 9",
+      "A’ Level subjects",
+      "School timings",
+      "Parent portal",
+      "How to apply",
+      "Uniform",
+      "Contact details"
+    ];
+    SUGGESTIONS.forEach(t=>{
+      const b=document.createElement('div');
+      b.className='chip'; b.textContent=t;
+      b.onclick=()=> { input.value=t; form.dispatchEvent(new Event('submit')); };
+      chips.appendChild(b);
+    });
 
-  "timings": {
-    "monday_thursday": "07:40 AM – 02:05 PM",
-    "friday": "07:25 AM – 11:20 AM",
-    "weekend": "Closed (Sat–Sun)"
-  },
+    function addBubble(text, who="bot"){
+      const row = document.createElement('div');
+      row.className="row";
+      const b = document.createElement('div');
+      b.className = `msg ${who==='you'?'you':'bot'}`;
+      b.innerText = text;
+      row.appendChild(b);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-  "vision": "To prepare innovative global leaders and realize the National Agenda by providing holistic, inclusive, quality and sustainable education.",
-  "mission": [
-    "Ensure academic excellence via continuous assessment, research, innovation and discovery.",
-    "Respect UAE culture and values.",
-    "Value-based learning delivered by committed, qualified staff.",
-    "Cater to differing abilities via competency-based teaching.",
-    "Humanitarian values and responsibility.",
-    "Strong parent & stakeholder collaboration."
-  ],
+    async function ask(message){
+      sendBtn.disabled = true;
+      addBubble(message,'you');
+      input.value = "";
 
-  "admissions": {
-    "apply": "Parents should visit the school or contact the Admissions Officer to apply. We’ll guide you through the steps and schedule any placement tests if required.",
-    "kg_age_rule": "KG1/KG2 applicants must be four years old on/before August 31 for September start.",
-    "grade_tests": "Grades 1–9 require a placement/entrance test in English & Mathematics (~1 hour each). Admission is competitive when applicants exceed seats.",
-    "no_grade10": "No new admissions to Grade 10 as students prepare for London Board exams.",
-    "grade11": "Enrollment starts in August after O’/Grade 10 results. For UK curriculum students who passed Board Exams with minimum A*/A (9–7).",
-    "grade12": "Admission to Grade 12 (IAL) is for students who completed IAS with minimum grades A and B.",
-    "a_level_enrollment": "For A’ Level, students should have O’Level/Grade 10 with six subjects including English and Mathematics and Grade A in the chosen A’ subjects.",
-    "results_contact": "Only selected applicants will be contacted with registration details and timelines.",
-    "subject_change_policy": "Once subject choices are made, they cannot be changed or dropped during the year. Changes are only considered right at the start and only if the administration advises parents.",
-    "docs_required": [
-      "Child’s passport + visa page",
-      "Birth certificate",
-      "Vaccination card (KG1/2 & Grade 1)",
-      "Emirates ID",
-      "Six passport photos",
-      "Latest report card + reference letter from previous school",
-      "Attested Transfer/School Leaving Certificate",
-      "Bonafide certificate (Grade 1–8)",
-      "Medical record book",
-      "Family book (UAE nationals only)"
-    ],
-    "transfer_notes": [
-      "Within UAE: attest certificates at the MoE in the concerned Educational Zone.",
-      "From abroad: attest at (1) Regional Education Office, (2) your country’s Embassy/Consulate in the UAE, and (3) UAE Ministry of Foreign Affairs."
-    ]
-  },
-
-  "fees_per_year_aed": {
-    "KG1-2": 7270,
-    "G1-3": 8100,
-    "G4-6": 9100,
-    "G7-8": 11200,
-    "G9-10": 13100,
-    "G11-12_Alevel": 15900,
-    "installments_note": "Fees are paid in three installments. For exact term amounts and due dates, please check with the Accounts Office."
-  },
-
-  "payments": {
-    "methods": "Fees can typically be paid via cash, cheque or bank transfer. Please confirm the available options and bank details with the Accounts Office.",
-    "late_penalties": "Late payment penalties may apply according to school policy. Contact Accounts for current details.",
-    "sibling_discount": "Sibling discounts may be available. The Accounts Office can confirm current eligibility and rates.",
-    "reregistration": "Returning students pay a re-registration fee to confirm their seat for the next academic year; timelines are announced by the office."
-  },
-
-  "curriculum": {
-    "board": "UK British Curriculum; Pearson Edexcel centre.",
-    "stages": [
-      "EYFS",
-      "Gr2–5 International Primary",
-      "Gr6–8 KS3 Lower Secondary",
-      "Gr9–10 GCSE/IGCSE",
-      "Gr11 IAS",
-      "Gr12 IAL"
-    ],
-    "medium": "English",
-    "arabic_islamic": "Arabic is mandatory in Grades 1–9 (and compulsory for Arabs until Grade 12). Islamic Studies is compulsory for Muslim students from Grade 1–12.",
-    "secondary_notes": [
-      "From Grade 9 students prepare for IGCSE/GCSE and later IAS/IAL.",
-      "Subject concentration (science or arts/commerce) begins in Grade 9, finalized at the end of Grade 8."
-    ]
-  },
-
-  "subjects": {
-    "grade9_minimum": "Minimum 9 subjects in Grade 9.",
-    "gcse_compulsory": [
-      "English Language (IGCSE)",
-      "Religious/Islamic Studies (per MoE; exam options available for Religious & Islamic Studies in English)",
-      "Social Studies (until Grade 9)",
-      "Mathematics (IGCSE)",
-      "Higher/Lower Arabic",
-      "MEP (Arabic/English) compulsory until Grade 12 (Arabic is compulsory for Arabs until Grade 12; Arabic board exam available as GCSE)"
-    ],
-    "gcse_optional": [
-      "English Literature (IGCSE)",
-      "ICT (IGCSE)",
-      "Global Citizenship (IGCSE) or Urdu (GCSE)"
-    ],
-    "pairs": [
-      "Chemistry or Accounts",
-      "Physics or Economics",
-      "Biology or Business Studies"
-    ],
-    "rules": [
-      "Choose subjects according to the requirements of your destination university and country.",
-      "Class availability depends on sufficient numbers opting.",
-      "Once choices are made, the subject cannot be changed/dropped during the year."
-    ],
-    "a_level": [
-      "Math",
-      "Physics or Economics",
-      "Chemistry or Accounts",
-      "Biology or Business Studies",
-      "Islam (English or Arabic)",
-      "Higher/Lower Arabic"
-    ],
-    "a_level_rules": [
-      "Choose at least two A’ Level subjects (excluding Arabic & Islamic).",
-      "For higher education in the UAE: Arabic is mandatory for all; Islamic is mandatory for Muslim students (MoE unified exams)."
-    ]
-  },
-
-  "reports": {
-    "collection": "A-Level / O-Level / AS-Level grades are collected from the Principal’s office. Lower grade report cards are distributed during Parent–Teacher Meetings (PTM)."
-  },
-
-  "facilities": {
-    "transport": "School transport is available on designated routes; seats are subject to availability and students must follow bus safety rules at all times.",
-    "uniform": "Uniform is mandatory and available on campus at the bookstore near reception.",
-    "canteen": "Yes, a canteen is available on campus."
-  },
-
-  "policies": {
-    "attendance": [
-      "Regular attendance is required; follow school timings strictly.",
-      "Absences require a valid reason/medical note and should be communicated to the school.",
-      "Excessive absence may affect promotion or exam eligibility in line with MoE guidelines."
-    ],
-    "leave": "To apply for leave, please submit a written leave letter to the class teacher.",
-    "assessment_examination": [
-      "Continuous assessment plus formal examinations as per Pearson Edexcel and MoE schedules.",
-      "Academic honesty is expected; malpractice may lead to cancellation and disciplinary action."
-    ],
-    "homework": [
-      "Homework reinforces classroom learning; submit assignments on time.",
-      "Parents are encouraged to support routines and a quiet study environment."
-    ],
-    "promotion_retention": [
-      "Promotion considers overall performance, assessments, attendance and conduct per school/MoE norms.",
-      "Support plans/remedial classes may be advised before retention is considered."
-    ],
-    "uniform_discipline": [
-      "Students must wear full school uniform and maintain a neat appearance; PE uniform on designated days.",
-      "Respectful behavior is expected at all times; prohibited items or misconduct lead to disciplinary measures."
-    ],
-    "health_safety": [
-      "Parents must disclose medical conditions and keep vaccination/records updated.",
-      "Sick students should remain at home; report contagious conditions promptly.",
-      "Child safeguarding procedures and emergency protocols are in place."
-    ],
-    "support_contact": "For academic support, the class teacher is your first contact; supervisors and counselors are also available."
-  },
-
-  "faqs": {
-    "admissions": [
-      {
-        "q": "What are the admission requirements?",
-        "a": "Admission requires a completed application, age-appropriate documents, and—where applicable—placement tests. Bring passport, Emirates ID, birth certificate, vaccination record, previous report cards, and an attested Transfer Certificate if transferring."
-      },
-      {
-        "q": "How do I apply?",
-        "a": "Please visit the school or contact the Admissions Officer. We’ll guide you through the steps, book placement tests if needed, and update you on seat availability."
-      },
-      {
-        "q": "Is there an entrance exam?",
-        "a": "Yes—Grades 1–9 have placement tests in English and Mathematics (about one hour each). A’ Level admission depends on prior results (O’Level/Grade 10 with six subjects incl. English & Math and Grade A in chosen A’ subjects)."
-      },
-      {
-        "q": "Can I transfer from another school?",
-        "a": "Yes. You’ll need an attested Transfer Certificate: within the UAE, by the MoE Educational Zone; from abroad, by the Regional Education Office, your country’s Embassy/Consulate in the UAE, and the UAE MOFA."
-      },
-      {
-        "q": "How long does the process take?",
-        "a": "Timelines vary by grade and seat availability. Once documents and tests are complete, selected applicants are contacted with registration details."
+      try{
+        const res = await fetch(API_URL, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ message, sessionId })
+        });
+        if(!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        addBubble(data.answer || "Sorry, I couldn't get that just now.");
+      }catch(e){
+        addBubble("Sorry, I couldn’t reach the knowledge service just now. Try again in a moment.");
+      }finally{
+        sendBtn.disabled = false;
+        input.focus();
       }
-    ],
-    "fees": [
-      {
-        "q": "What is the fee structure?",
-        "a": "Annual tuition (AED): KG1–2 7,270 • G1–3 8,100 • G4–6 9,100 • G7–8 11,200 • G9–10 13,100 • G11–12/A’Level 15,900. Fees are paid in three installments."
-      },
-      {
-        "q": "How can I pay the fees?",
-        "a": "You can typically pay via cash, cheque or bank transfer. Please check with the Accounts Office for current options and bank details."
-      },
-      {
-        "q": "Are there late fees or sibling discounts?",
-        "a": "Late payment penalties and sibling discounts may apply according to current policy. The Accounts Office can confirm eligibility and rates."
-      },
-      {
-        "q": "Do I need to pay re-registration fees?",
-        "a": "Yes—returning students pay a re-registration fee to confirm their seat for the next year. Dates and amounts are announced by the office."
-      }
-    ],
-    "academics": [
-      {
-        "q": "What curriculum do you follow?",
-        "a": "We’re a Pearson Edexcel centre offering the UK British Curriculum: GCSE/IGCSE (Grades 9–10), IAS (Grade 11) and IAL (Grade 12). Medium of instruction is English. Arabic and Islamic Studies follow MoE requirements."
-      },
-      {
-        "q": "What subjects are offered?",
-        "a": "Core: English, Mathematics, Sciences. Options include ICT, English Literature, Global Citizenship or Urdu, and subject pairings (Chemistry or Accounts; Physics or Economics; Biology or Business Studies). A’ Level options include Math; Physics or Economics; Chemistry or Accounts; Biology or Business Studies; Islam (English/Arabic); Higher/Lower Arabic."
-      },
-      {
-        "q": "What are the school timings?",
-        "a": "Mon–Thu: 07:40 AM – 02:05 PM • Fri: 07:25 AM – 11:20 AM • Weekend: Closed (Sat–Sun)."
-      },
-      {
-        "q": "How are exams and grading done?",
-        "a": "Assessment combines classwork, assignments, and formal examinations per Pearson Edexcel and MoE schedules. Academic honesty is mandatory."
-      },
-      {
-        "q": "How do I collect report cards?",
-        "a": "A-Level/AS/O-Level results can be collected from the Principal’s office. Lower grades receive report cards during PTM."
-      },
-      {
-        "q": "Are extra classes or tutoring offered?",
-        "a": "Extra help is provided where needed. If the class teacher identifies a gap, they’ll advise on support and timings."
-      }
-    ],
-    "general": [
-      {
-        "q": "Where is the school located and how do I contact you?",
-        "a": "P.O. Box 1665, Fujairah, UAE • Phone: 09-2282828 • Fax: 09-2281910 • Email: secretary.principal-smf@smgeducation.org."
-      },
-      {
-        "q": "Who is the Principal?",
-        "a": "Our Principal is Fr. Suresh Kumar SDB."
-      },
-      {
-        "q": "Is transportation available?",
-        "a": "Yes, on designated routes. Seats are limited and safety rules must be followed. Route details are provided during admission."
-      },
-      {
-        "q": "What are the rules & regulations?",
-        "a": "Key expectations: punctuality and attendance, neat full uniform, respectful behavior, academic honesty, and compliance with MoE/Edexcel exam rules."
-      }
-    ],
-    "student_life": [
-      {
-        "q": "Do you have extracurricular activities and clubs?",
-        "a": "Yes—cultural, academic and recreational activities run throughout the year. Notices are sent to parents each term."
-      },
-      {
-        "q": "What sports are offered?",
-        "a": "Core offerings include football, basketball and athletics. Opportunities may vary by term and grade."
-      },
-      {
-        "q": "Is there a school uniform? Where do I buy it?",
-        "a": "Uniform is mandatory. You can purchase it on campus at the bookstore near reception."
-      },
-      {
-        "q": "Is there a canteen?",
-        "a": "Yes, a canteen is available on campus."
-      }
-    ],
-    "policies_faq": [
-      {
-        "q": "What is the attendance policy?",
-        "a": "Regular attendance is expected. Absences require a valid reason/medical note. Excess absence can affect promotion or exam eligibility."
-      },
-      {
-        "q": "How do I apply for leave?",
-        "a": "Please send a written leave letter to the class teacher with the student’s name, grade, dates and reason."
-      },
-      {
-        "q": "What is your stance on bullying?",
-        "a": "We maintain a zero-tolerance policy. Concerns should be reported immediately to the class teacher or school office for prompt action and support."
-      },
-      {
-        "q": "Can I drop or change subjects in Grade 9?",
-        "a": "Grade 9 requires a minimum of 9 subjects. Once choices are made, subjects cannot be changed or dropped during the year. Changes are only considered right at the start and only if the administration advises parents. If you plan to transfer next year, discuss options with the Academic Supervisor before term starts."
-      }
-    ]
-  }
-}
-</script>
+    }
 
-  <script>
-  const chat = document.getElementById('chat');
-  const form = document.getElementById('form');
-  const input = document.getElementById('q');
-  const chips = document.getElementById('chips');
-  const KB = document.getElementById('kb').textContent;
-
-  function addBubble(text, me=false){
-    const b=document.createElement('div');
-    b.className='bubble ' + (me?'me':'bot');
-    b.innerHTML=text.replace(/\n/g,'<br>');
-    chat.appendChild(b); chat.scrollTop=chat.scrollHeight; return b;
-  }
-  let typingEl=null;
-  function showTyping(){ typingEl=document.createElement('div'); typingEl.className='bubble bot';
-    typingEl.innerHTML=`<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
-    chat.appendChild(typingEl); chat.scrollTop=chat.scrollHeight; }
-  function hideTyping(){ if(typingEl){typingEl.remove(); typingEl=null;} }
-
-  // session memory (very light)
-  const history = []; // {role, content}
-  const profile = JSON.parse(localStorage.getItem("smchs_profile") || "{}");
-  function rememberFrom(text){
-    const g=text.match(/\bgrade\s*(\d{1,2})\b/i);
-    if(g){profile.grade=g[1];localStorage.setItem("smchs_profile",JSON.stringify(profile));}
-    const kg=text.match(/\bkg\s*([12])\b/i);
-    if(kg){profile.grade=kg[1]==="1"?"KG1":"KG2";localStorage.setItem("smchs_profile",JSON.stringify(profile));}
-  }
-
-  async function ask(q){
-    addBubble(q,true); rememberFrom(q); input.value=''; input.focus(); showTyping();
-    const profileHint = profile.grade ? ` (profile: Grade ${profile.grade})` : '';
-    try{
-      const res = await fetch(WORKER_URL, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ question:q+profileHint, kb:KB, history })
-      });
-      hideTyping();
-      if(!res.ok){ addBubble("Sorry, I couldn’t reach the service. Please try again.", false); return; }
-      const data = await res.json();
-      addBubble(data.answer || "I don’t have that in the official info. Please contact the school office.", false);
-      history.push({role:"user", content:q});
-      history.push({role:"assistant", content:data.answer});
-    }catch(e){ hideTyping(); addBubble("Network error. Please try again.", false); }
-  }
-
-  form.addEventListener('submit', e=>{e.preventDefault(); const q=input.value.trim(); if(q) ask(q);});
-  chips.addEventListener('click', e=>{const btn=e.target.closest('[data-q]'); if(btn) ask(btn.dataset.q);});
-  setTimeout(()=>input.focus(),200);
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const text = (input.value||"").trim();
+      if(!text) return;
+      ask(text);
+    });
   </script>
 </body>
 </html>
-
